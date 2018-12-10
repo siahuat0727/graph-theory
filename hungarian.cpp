@@ -59,9 +59,10 @@ inline void update_uv()
                 eps = M[x][y] < eps ? M[x][y] : eps;
 
     for (int i = 0; i < max_nm; ++i) {
-        // Update u, v with branch elimination, but unportable?
-        u[i] -= eps & (-1LL + (ll)vertex_cover_x[i]);
-        v[i] += eps & (-1LL + (ll)!vertex_cover_y[i]);
+        if (!vertex_cover_x[i])
+            u[i] -= eps;
+        if (vertex_cover_y[i])
+            v[i] += eps;
     }
 }
 
@@ -79,7 +80,7 @@ inline int max_matching()
     return num_match;
 }
 
-inline void min_vector_cover()
+inline void min_vertex_cover()
 {
     memset(vertex_cover_x, true, sizeof(vertex_cover_x));
     memset(vertex_cover_y, false, sizeof(vertex_cover_y));
@@ -113,7 +114,7 @@ int main()
         if (max_nm == max_matching())
             break;
 
-        min_vector_cover();
+        min_vertex_cover();
 
         update_uv();
     } while (true);
